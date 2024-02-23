@@ -13,8 +13,10 @@ services:
       TZ: Europe/Amsterdam
   owntracks_recorder:
     image: owntracks/recorder
+    container_name: owntracks_recorder
+    hostname: owntracks_recorder
     ports:
-      - 8183:8083
+      - 8083:8083
     volumes:
       - ./recorder-config:/config
       - ./recorder-store:/store
@@ -23,3 +25,14 @@ services:
       - 'env.owntracks_recorder'
     environment:
       TZ: Europe/Amsterdam
+  owntracks_frontend:
+    image: owntracks/frontend
+    container_name: owntracks_frontend
+    ports:
+      - 80:80
+    volumes:
+      - ./frontend/config.js:/usr/share/nginx/html/config/config.js
+    environment:
+      - SERVER_HOST=owntracks_recorder
+      - SERVER_PORT=8083
+    restart: unless-stopped
