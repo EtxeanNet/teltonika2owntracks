@@ -47,7 +47,8 @@ class NMEAListener:
             logger.debug('Connection closed')
 
         except Exception as _: 
-            logging.exception("Error occurred while handling connection") 
+            logging.exception("Error occurred while handling connection")
+            self.stop()
 
     async def process_nmea(self, nmea_sentence: str):
         logger.debug(f'Received {nmea_sentence}')

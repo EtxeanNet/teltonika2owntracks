@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  teltonika_owntracks:
+    image: etxean/teltonika-owntracks:latest
+    container_name: teltonika_owntracks
+    restart: unless-stopped
+    ports:
+      - "8500:8500"
+    env_file:
+      - 'env.teltonika_owntracks'
+    environment:
+      TZ: Europe/Amsterdam
+  owntracks_recorder:
+    image: owntracks/recorder
+    ports:
+      - 8183:8083
+    volumes:
+      - ./recorder-config:/config
+      - ./recorder-store:/store
+    restart: unless-stopped
+    env_file:
+      - 'env.owntracks_recorder'
+    environment:
+      TZ: Europe/Amsterdam

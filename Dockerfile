@@ -27,7 +27,7 @@ ENV VIRTUAL_ENV=/app/.venv \
     PYTHONDONTWRITEBYTECODE=1 
 
 COPY --from=build ${VIRTUAL_ENV} ${VIRTUAL_ENV}
-COPY ./teltonika_mqtt_monitor teltonika_mqtt_monitor
+COPY ./teltonika_owntracks teltonika_owntracks
 
 # During debugging, this entry point will be overridden. For more information, refer to https://aka.ms/vscode-docker-python-debug
-CMD ["python", "-m", "teltonika_mqtt_monitor"]
+CMD ["python", "-m", "teltonika_owntracks"]
