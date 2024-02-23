@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "teltonika-owntracks"
+version = "0.1.0"
+description = ""
+authors = ["Ard Kuijpers <ardkuijpers@mp.nl>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+pydantic-settings = "^2.2.1"
+pynmeagps = "^1.0.33"
+paho-mqtt = "^2.0.0"
+
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.0.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
