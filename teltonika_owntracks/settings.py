@@ -27,3 +27,6 @@ class Settings(BaseSettings):
     mqtt_username: str | None = Field(None, alias='MQTT_USERNAME')
     mqtt_password: str | None = Field(None, alias='MQTT_PASSWORD')
     mqtt_client: str = Field(f"{NAME}-{HOSTNAME}", alias='MQTT_CLIENT')
+
+    detector_history: int = Field(60, alias='DETECTOR_HISTORY')
+    detector_limit: int = Field(25, alias='DETECTOR_LIMIT')

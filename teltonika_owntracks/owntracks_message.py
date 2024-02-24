@@ -2,8 +2,6 @@ from pydantic import Field, RootModel
 from pydantic.dataclasses import dataclass
 from datetime import datetime
 
-from .utils import to_timestamp
-
 @dataclass
 class OwnTracksMessage:
     tst: int
@@ -18,7 +16,7 @@ class OwnTracksMessage:
     '''Course over ground'''
     tid: str
     '''clientid'''
-    created_at: int = Field(default_factory=lambda: to_timestamp(datetime.utcnow()))
+    created_at: int = Field(default_factory=lambda: int(datetime.timestamp(datetime.now())))
     '''Timestamp when message was created'''
     _type: str = 'location'
     '''OwnTracks message type'''

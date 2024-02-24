@@ -1,5 +1,5 @@
 import asyncio
-from datetime import datetime
+from datetime import datetime, UTC
 from functools import partial
 import logging
 
@@ -11,13 +11,12 @@ from .nmea_listener import NMEAListener
 from .owntracks_message import OwnTracksMessage
 from .owntracks_publisher import OwnTracksPublisher
 from .movement_detector import MovementDetector
-from .utils import to_timestamp
 
 logging.basicConfig(level=Settings().loglevel, format='%(asctime)s [%(levelname)s] %(name)s - %(message)s')
 logger = logging.getLogger(__name__)
 
 def from_nmea(nmea: NMEAMessage, client_id = 'TC') -> OwnTracksMessage:
-        tst = to_timestamp(datetime.combine(nmea.date, nmea.time))
+        tst = int(datetime.timestamp(datetime.combine(nmea.date, nmea.time, tzinfo=UTC)))
         lat = nmea.lat
         lon = nmea.lon
         vel = int(knots2spd(nmea.spd, 'KMPH'))
@@ -32,17 +31,14 @@ async def publish(publisher: OwnTracksPublisher, detector: MovementDetector, nme
                
         ot_msg: OwnTracksMessage = from_nmea(nmea)
         has_moved = detector.has_moved(ot_msg.tst, ot_msg.lat, ot_msg.lon)
-        if has_moved:
+        if has_moved or not publisher.has_published():
             await publisher.publish(ot_msg)
-        else:
-            logger.debug('No movement detected')
-
 
 async def main():
     settings = Settings()
     publisher = OwnTracksPublisher(settings)
     listener = NMEAListener(settings)
-    detector = MovementDetector()
+    detector = MovementDetector(settings.detector_history, settings.detector_limit)
     await listener.listen(partial(publish,publisher, detector))
 
 if __name__ == '__main__':

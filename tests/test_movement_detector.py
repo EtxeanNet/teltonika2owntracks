@@ -4,7 +4,7 @@ from teltonika_owntracks.movement_detector import MovementDetector
 def test_has_moved_standstill():
     start = datetime.timestamp(datetime(2024, 2,24, 12, 0, 0))
     now = start
-    detector = MovementDetector(60, lambda: now)
+    detector = MovementDetector(60, 25, lambda: now)
     movements = []
     for lat, lon in get_history_standstill():
         now += 5
@@ -14,7 +14,7 @@ def test_has_moved_standstill():
 def test_has_moved_moving():
     start = datetime.timestamp(datetime(2024, 2,24, 12, 0, 0))
     now = start
-    detector = MovementDetector(60, lambda: now)
+    detector = MovementDetector(60, 25, lambda: now)
     movements = []
     for lat, lon in get_history_moving():
         now += 5

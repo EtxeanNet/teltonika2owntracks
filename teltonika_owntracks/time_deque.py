@@ -2,9 +2,6 @@ import collections
 from dataclasses import dataclass
 import typing
 from datetime import datetime
-import logging
-
-logger = logging.getLogger(__name__)
 
 @dataclass
 class DequeItem:
@@ -18,7 +15,7 @@ class TimeDeque:
 
     @staticmethod
     def default_get_current_time() -> float:
-        return datetime.timestamp(datetime.utcnow())
+        return datetime.timestamp(datetime.now())
 
     def __init__(self, time_window_seconds: int = 300, get_current_time: typing.Callable[[], float] = default_get_current_time):
         self._time_window_seconds = time_window_seconds
@@ -41,7 +38,6 @@ class TimeDeque:
             """
             return True
 
-        logger.debug("Pruned %d items from deque", len(self._deque))
         return True
 
     def append(self, item, time: float | None = None) -> bool:
@@ -51,7 +47,6 @@ class TimeDeque:
         return True
 
     def list(self) -> list[typing.Any]:
-        self.prune()
         return [it.value for it in list(self._deque)]
 
     def __len__(self) -> int:

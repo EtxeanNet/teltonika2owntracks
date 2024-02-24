@@ -10,6 +10,7 @@ logger = logging.getLogger(__name__)
 class OwnTracksPublisher:
     
     def __init__(self, settings: Settings):
+        self._has_published = False
         self._topic = f'owntracks/{settings.mqtt_username}/{settings.device_id}'
         client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
         client.on_connect = self._on_connect
@@ -29,6 +30,10 @@ class OwnTracksPublisher:
     async def publish(self, ot_msg: OwnTracksMessage):
         payload = ot_msg.to_mqtt_payload()
         self._client.publish(self._topic, payload, retain=True)
+        self._has_published = True
+
+    def has_published(self):
+        return self._has_published
 
     # The callback for when the client receives a CONNACK response from the server.
     def _on_connect(self, client: mqtt.Client, userdata, flags, reason_code, properties):
