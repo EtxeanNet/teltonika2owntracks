@@ -26,7 +26,7 @@ def from_nmea(nmea: NMEAMessage, client_id = 'TC') -> OwnTracksMessage:
         return OwnTracksMessage(tst, lat, lon, vel, cog, tid)
 
 async def publish(publisher: OwnTracksPublisher, detector: MovementDetector, nmea: NMEAMessage):
-        if nmea.msgID != "RMC":
+        if nmea is None or nmea.msgID != "RMC":
             return
                
         ot_msg: OwnTracksMessage = from_nmea(nmea)
