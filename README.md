@@ -37,3 +37,5 @@ Using `netcat`, you can send messages to a TCP port. Start this in powershell wi
 ```powershell
 nc localhost 8500
 ```
+
+And then send NMEA messages. These can be generated e.g. using [https://nmeagen.org/](https://nmeagen.org/)

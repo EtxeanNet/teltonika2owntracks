@@ -1,10 +1,10 @@
 
-FROM python:3.11-slim as build
+FROM python:3.11-slim AS build
 WORKDIR /app
 ENV POETRY_NO_INTERACTION=1 \
     POETRY_VIRTUALENVS_IN_PROJECT=1 \
     POETRY_VIRTUALENVS_CREATE=1 \
-    POETRY_CACHE_DIR=/tmp/poetry_cache \ 
+    POETRY_CACHE_DIR=/tmp/poetry_cache \
     POETRY_VERSION="1.7.1" \
     POETRY_VENV=.venv
 
@@ -20,11 +20,11 @@ ENV PATH="${PATH}:${POETRY_VENV}/bin"
 COPY pyproject.toml poetry.lock ./
 RUN --mount=type=cache,target=$POETRY_CACHE_DIR poetry install --without dev --no-root
 
-FROM python:3.11-slim as final
+FROM python:3.11-slim AS final
 WORKDIR /app
 ENV VIRTUAL_ENV=/app/.venv \
     PATH="/app/.venv/bin:$PATH" \
-    PYTHONDONTWRITEBYTECODE=1 
+    PYTHONDONTWRITEBYTECODE=1
 
 COPY --from=build ${VIRTUAL_ENV} ${VIRTUAL_ENV}
 COPY ./teltonika_owntracks teltonika_owntracks
