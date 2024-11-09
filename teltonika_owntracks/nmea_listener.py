@@ -16,8 +16,7 @@ class NMEAListener:
 
     async def listen(self, publisher_func: Callable[[NMEAMessage], Awaitable[None]]):
         self._publish = publisher_func
-        self._server = await asyncio.start_server(
-            self.handle, self._host, self._port)
+        self._server = await asyncio.start_server(self.handle, self._host, self._port)
 
         logger.info('Listening on %s:%s' % (self._host, self._port))
         async with self._server:
@@ -36,20 +35,20 @@ class NMEAListener:
         try:
             logger.debug('Handle connection')
             while True:
-                line = await reader.readline()
-                if not line:
-                    break
-
                 try:
+                    line = await reader.readline()
+                    if not line:
+                        break
                     line = line.decode().rstrip()
                     if line:
                         await self.process_nmea(line)
+                except ConnectionResetError as _:
+                    logging.info("Client closed the connection")
+                    break
                 except UnicodeDecodeError:
                     # silently ignore line decoding errors
                     pass
-
             logger.debug('Connection closed')
-
         except Exception as _:
             logging.exception("Error occurred while handling connection")
             self.stop()

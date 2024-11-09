@@ -29,3 +29,11 @@ The bridge can also be run in a docker container. For example:
 docker buildx build . -t etxean/teltonika-owntracks --push
 docker compose up -d
 ```
+
+## Sending messages for testing
+
+Using `netcat`, you can send messages to a TCP port. Start this in powershell with
+
+```powershell
+nc localhost 8500
+```
